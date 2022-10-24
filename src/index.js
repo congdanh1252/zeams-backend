@@ -1,14 +1,30 @@
 const express = require('express')
 const app = express()
-const server = require('http').Server(app)
+const http = require('http')
+const server = http.Server(app)
 const io = require('socket.io')(server)
 
-const port = 3001
+const port = process.env.PORT || 3001
+
+app.use(express.json())
 
 app.get('/', (req, res) => {
   res.send('Hello Zeams!')
 })
 
-app.listen(port, () => {
+io.on('connection', (socket) => {
+  console.log('A user connected to io')
+
+  socket.on('message', (msg) => {
+    console.log('Message: ' + msg)
+    io.emit('message', msg)
+  })
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected')
+  })
+})
+// io.listen(3001)
+server.listen(port, () => {
   console.log('Listen to Zeams Backend from port 3001!')
 })
