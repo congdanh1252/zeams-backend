@@ -16,8 +16,7 @@ io.on('connection', (socket) => {
   console.log('A user connected to io')
 
   socket.on('message', (msg) => {
-    console.log('Message: ' + msg)
-    io.emit('message', msg)
+    socket.broadcast.emit('message', msg)
   })
 
   socket.on('disconnect', () => {
