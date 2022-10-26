@@ -4,6 +4,8 @@ const http = require('http')
 const server = http.Server(app)
 const io = require('socket.io')(server)
 
+const { addRoom } = require('./controller/room.controller')
+
 const port = process.env.PORT || 3001
 
 app.use(express.json())
@@ -16,14 +18,35 @@ io.on('connection', (socket) => {
   console.log('A user connected to io')
 
   socket.on('message', (msg) => {
-    socket.broadcast.emit('message', msg)
+    const msg_obj = JSON.parse(msg)
+    switch (msg_obj.type) {
+      case 'join':
+        const callback = (docRef) => {
+          socket.join(msg_obj.roomId)
+          socket.emit('message', JSON.stringify({
+            type: msg_obj.type,
+            data: {
+              receiver: msg_obj.data.sender
+            }
+          }))
+          console.log('User joined room ' + msg_obj.roomId)
+        }
+        if (msg_obj.create != null && msg_obj.create) {
+          addRoom(msg_obj.roomId, callback)
+        } else {
+          callback()
+        }
+        break
+      default:
+        socket.broadcast.to(msg_obj.roomId).emit('message', msg)
+    }
   })
 
   socket.on('disconnect', () => {
     console.log('User disconnected')
   })
 })
-// io.listen(3001)
+
 server.listen(port, () => {
   console.log('Listen to Zeams Backend from port 3001!')
 })
