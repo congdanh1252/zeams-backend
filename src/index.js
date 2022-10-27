@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
         if (msg_obj.create != null && msg_obj.create) {
           addRoom(msg_obj.roomId, callback)
         } else {
-          callback(msg_obj.roomId)
+          callback(msg_obj.roomRef)
         }
         break
       case 'hang-up':
