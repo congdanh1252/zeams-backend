@@ -4,7 +4,7 @@ const http = require('http')
 const server = http.Server(app)
 const io = require('socket.io')(server)
 
-const { addRoom, addParticipantToRoom } = require('./controller/room.controller')
+const { addRoom, addParticipantToRoom, removeParticipantFromRoom } = require('./controller/room.controller')
 
 const port = process.env.PORT || 3001
 
@@ -43,7 +43,9 @@ io.on('connection', (socket) => {
         break
       case 'hang-up':
         socket.leave(msg_obj.roomId)
-        socket.broadcast.to(msg_obj.roomId).emit('message', msg)
+        removeParticipantFromRoom(msg_obj.roomRef, msg_obj.sender, () => {
+          socket.broadcast.to(msg_obj.roomId).emit('message', msg)
+        })
         break
       default:
         socket.broadcast.to(msg_obj.roomId).emit('message', msg)

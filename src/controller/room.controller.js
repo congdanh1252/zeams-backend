@@ -29,9 +29,9 @@ const addRoom = (id, callback) => {
   })
 }
 
-const addParticipantToRoom = (docId, participantId, callback) => {
+const addParticipantToRoom = (docRef, participantId, callback) => {
   db.collection('rooms')
-  .doc(docId)
+  .doc(docRef)
   .get()
   .then(snapshot => {
     if (snapshot.exists) {
@@ -39,7 +39,7 @@ const addParticipantToRoom = (docId, participantId, callback) => {
       let currentPeople = data.participants ? data.participants : []
       currentPeople.push(participantId)
 
-      db.collection('rooms').doc(docId)
+      db.collection('rooms').doc(docRef)
       .update({
         participants: currentPeople
       })
@@ -51,6 +51,40 @@ const addParticipantToRoom = (docId, participantId, callback) => {
   })
 }
 
+const removeParticipantFromRoom = (docRef, participantId, callback) => {
+  db.collection('rooms')
+  .doc(docRef)
+  .get()
+  .then(snapshot => {
+    if (snapshot.exists) {
+      const temp = []
+      const data = snapshot.data()
+      let currentPeople = data.participants ? data.participants : []
+      const position = currentPeople.indexOf(participantId)
+      currentPeople.splice(position, 1)
+
+      if (currentPeople.length == 0) {
+        db.collection('rooms').doc(docRef)
+        .delete()
+        .then(() => {
+          callback()
+          return
+        })
+      } else {
+        db.collection('rooms').doc(docRef)
+        .update({
+          participants: currentPeople
+        })
+        .then(() => {
+          callback()
+          return
+        })
+      }
+    }
+  })
+}
+
 exports.generateId = generateId
 exports.addRoom = addRoom
 exports.addParticipantToRoom = addParticipantToRoom
+exports.removeParticipantFromRoom = removeParticipantFromRoom
