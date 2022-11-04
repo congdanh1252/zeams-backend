@@ -41,6 +41,9 @@ io.on('connection', (socket) => {
           callback(msg_obj.roomRef)
         }
         break
+      case 'chat':
+        socket.to(msg_obj.roomId).emit('message', msg)
+        break
       case 'hang-up':
         socket.leave(msg_obj.roomId)
         removeParticipantFromRoom(msg_obj.roomRef, msg_obj.sender, () => {
