@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
         }
         break
       case 'chat':
-        socket.emit('message', msg)
+        io.to(msg_obj.roomId).emit('message', msg)
         break
       case 'hang-up':
         socket.leave(msg_obj.roomId)
