@@ -4,6 +4,8 @@
     "dev": "nodemon src/index"
   },
   "dependencies": {
+    "cloudinary": "^1.32.0",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "firebase-admin": "^11.2.0",
     "socket.io": "^4.5.3",
