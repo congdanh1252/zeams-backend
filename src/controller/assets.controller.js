@@ -13,7 +13,7 @@ const storeAsset = (asset, callback) => {
       cloudinary.v2.uploader
       .upload(asset, {
         resource_type: "auto",
-        // upload_preset: "ktld7qkm"
+        upload_preset: "dc68mwoc"
       })
       .then((result) => {
         console.log('Upload asset success!')

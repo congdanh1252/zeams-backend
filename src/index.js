@@ -46,16 +46,17 @@ io.on('connection', (socket) => {
         if (msg_obj.contentType == 'text') {
           io.to(msg_obj.roomId).emit('message', msg)
         } else {
-          // storeAsset(msg_obj.content, (url) => {
-          //   // io.to(msg_obj.roomId).emit('message', JSON.stringify({
-          //   //   type: 'chat',
-          //   //   sender: msg_obj.userId,
-          //   //   content: url,
-          //   //   roomId: msg_obj.roomId,
-          //   //   contentType: msg_obj.contentType,
-          //   //   createdAt: msg_obj.createdAt,
-          //   // }))
-          // })
+          storeAsset(msg_obj.content, (url) => {
+            io.to(msg_obj.roomId).emit('message', JSON.stringify({
+              type: 'chat',
+              content: url,
+              sender: msg_obj.sender,
+              roomId: msg_obj.roomId,
+              fileName: msg_obj.fileName,
+              createdAt: msg_obj.createdAt,
+              contentType: msg_obj.contentType,
+            }))
+          })
         }
         break
       case 'hang-up':
