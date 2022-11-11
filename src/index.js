@@ -1,11 +1,15 @@
 const express = require('express')
 const app = express()
 const http = require('http')
-const { storeAsset } = require('./controller/assets.controller')
 const server = http.Server(app)
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {maxHttpBufferSize: 1e7}) // 10 MB
 
-const { addRoom, addParticipantToRoom, removeParticipantFromRoom } = require('./controller/room.controller')
+const {
+  addRoom,
+  addParticipantToRoom,
+  removeParticipantFromRoom
+} = require('./controller/room.controller')
+const { storeAsset } = require('./controller/assets.controller')
 
 const port = process.env.PORT || 3001
 
