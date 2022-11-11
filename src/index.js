@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const http = require('http')
 const server = http.Server(app)
-const io = require('socket.io')(server, {maxHttpBufferSize: 1e7}) // 10 MB
+const io = require('socket.io')(server) // 10 MB // , {maxHttpBufferSize: 1e7}
 
 const {
   addRoom,
