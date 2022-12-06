@@ -37,9 +37,9 @@ const addParticipantToRoom = (docRef, participant, callback) => {
     .then((snapshot) => {
       if (snapshot.exists) {
         const data = snapshot.data()
-        let participantData = {
-          participantId: participant.id,
-          participantName: participant.name,
+        const participantData = {
+          id: participant.id,
+          name: participant.name,
         }
         let currentPeople = data.participants ? data.participants : []
         currentPeople.push(participantData)
@@ -67,8 +67,9 @@ const removeParticipantFromRoom = (docRef, participantId, callback) => {
         const data = snapshot.data()
         let currentPeople = data.participants ? data.participants : []
         let position = -1
+
         for (let index = 0; index < currentPeople.length; index++) {
-          if (currentPeople.participantId == participantId) {
+          if (currentPeople[i].id == participantId) {
             position = index
             break
           }

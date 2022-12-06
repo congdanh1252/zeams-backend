@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
                 data: {
                   docRef: docId,
                   participants: participants,
-                  receiver: msg_obj.data.sender,
+                  receiver: msg_obj.data.sender.id,
                 },
               })
             )
