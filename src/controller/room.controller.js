@@ -58,14 +58,15 @@ const addParticipantToRoom = (docRef, participant, callback) => {
 }
 
 const removeParticipantFromRoom = (docRef, participantId, callback) => {
+  console.log("User is leaving: " + docRef)
   db.collection("rooms")
     .doc(docRef)
     .get()
     .then((snapshot) => {
       if (snapshot.exists) {
-        const temp = []
         const data = snapshot.data()
         let currentPeople = data.participants ? data.participants : []
+        console.log("Current people: " + currentPeople)
         let position = -1
 
         for (let index = 0; index < currentPeople.length; index++) {
@@ -74,6 +75,8 @@ const removeParticipantFromRoom = (docRef, participantId, callback) => {
             break
           }
         }
+
+        console.log("Index to remove: " + index)
 
         if (position != -1) {
           currentPeople.splice(position, 1)
