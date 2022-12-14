@@ -69,7 +69,7 @@ const removeParticipantFromRoom = (docRef, participantId, callback) => {
         let position = -1
 
         for (let index = 0; index < currentPeople.length; index++) {
-          if (currentPeople[i].id == participantId) {
+          if (currentPeople[index].id == participantId) {
             position = index
             break
           }
