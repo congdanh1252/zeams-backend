@@ -72,7 +72,7 @@ io.on("connection", (socket) => {
         break
       case "hang-up":
         socket.leave(msg_obj.roomId)
-        removeParticipantFromRoom(msg_obj.roomRef, msg_obj.sender.id, () => {
+        removeParticipantFromRoom(msg_obj.roomRef, msg_obj.sender, () => {
           socket.broadcast.to(msg_obj.roomId).emit("message", msg)
         })
         break
