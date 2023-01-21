@@ -19,6 +19,7 @@ app.get("/", (req, res) => {
   res.send("Hello Zeams!")
 })
 
+const points = []
 io.on("connection", (socket) => {
   console.log("A user connected to io")
 
@@ -38,20 +39,21 @@ io.on("connection", (socket) => {
                   docRef: docId,
                   participants: participants,
                   receiver: msg_obj.data.sender.id,
+                  points
                 },
               })
             )
             console.log("User joined room " + msg_obj.roomId)
           })
         }
-        if (msg_obj.create != null && msg_obj.create) {
+        if (msg_obj.create !== null && msg_obj.create) {
           addRoom(msg_obj.roomId, callback)
         } else {
           callback(msg_obj.roomRef)
         }
         break
       case "chat":
-        if (msg_obj.contentType == "text") {
+        if (msg_obj.contentType === "text") {
           io.to(msg_obj.roomId).emit("message", msg)
         } else {
           storeAsset(msg_obj.content, (url) => {
@@ -69,6 +71,10 @@ io.on("connection", (socket) => {
             )
           })
         }
+        break
+      case "drawing": 
+        console.log(points.length)
+        points.push(msg_obj.data)
         break
       case "hang-up":
         socket.leave(msg_obj.roomId)
