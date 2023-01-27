@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
   res.send("Hello Zeams!")
 })
 
-const points = []
+let points = {}
 io.on("connection", (socket) => {
   console.log("A user connected to io")
 
@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
                   docRef: docId,
                   participants: participants,
                   receiver: msg_obj.data.sender.id,
-                  points
+                  points: (points[msg_obj.roomId] !== undefined && points[msg_obj.roomId] !== null) ? points[msg_obj.roomId] : []
                 },
               })
             )
@@ -73,8 +73,11 @@ io.on("connection", (socket) => {
         }
         break
       case "drawing": 
-        console.log(points.length)
-        points.push(msg_obj.data)
+        if (points[msg_obj.roomId] === undefined || points[msg_obj.roomId] === null) 
+          points[msg_obj.roomId] = []
+        else {
+          points[msg_obj.roomId].push(msg_obj.data)
+        }
         break
       case "hang-up":
         socket.leave(msg_obj.roomId)
