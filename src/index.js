@@ -20,6 +20,8 @@ app.get("/", (req, res) => {
 })
 
 let points = {}
+let chats = {}
+
 io.on("connection", (socket) => {
   console.log("A user connected to io")
 
@@ -39,6 +41,7 @@ io.on("connection", (socket) => {
                   docRef: docId,
                   participants: participants,
                   receiver: msg_obj.data.sender.id,
+                  chats: chats[msg_obj.roomId] ? chats[msg_obj.roomId] : [],
                   points: (points[msg_obj.roomId] !== undefined && points[msg_obj.roomId] !== null) ? points[msg_obj.roomId] : []
                 },
               })
@@ -77,6 +80,13 @@ io.on("connection", (socket) => {
           points[msg_obj.roomId] = []
         else {
           points[msg_obj.roomId].push(msg_obj.data)
+        }
+        break
+      case "chat-on-web":
+        if (chats[msg_obj.roomId] === undefined || chats[msg_obj.roomId] === null) 
+          chats[msg_obj.roomId] = []
+        else {
+          chats[msg_obj.roomId].push(msg_obj.data)
         }
         break
       case "hang-up":
