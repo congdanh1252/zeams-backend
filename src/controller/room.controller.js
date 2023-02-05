@@ -76,8 +76,6 @@ const removeParticipantFromRoom = (docRef, participantId, callback) => {
           }
         }
 
-        console.log("Index to remove: " + index)
-
         if (position != -1) {
           currentPeople.splice(position, 1)
         }
